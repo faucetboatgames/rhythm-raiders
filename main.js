@@ -1,3 +1,4 @@
+"use strict";
 // Note: Declarations for startButton, retryButton, playAgainButton, startLevel, initAudio etc.
 // are omitted here assuming they are correctly resolved by TS or are already present.
 // If TS still complains, they might need to be added back.
@@ -5,9 +6,9 @@
 // Functions and variables from game.ts (like startLevel, handleKeyPress)
 // and ui.ts (like startButton, retryButton) are expected to be globally available
 // after their respective .js files are loaded.
-document.addEventListener('DOMContentLoaded', function () {
+document.addEventListener('DOMContentLoaded', () => {
     if (startButton) {
-        startButton.addEventListener('click', function () {
+        startButton.addEventListener('click', () => {
             initAudio(); // Initialize audio on first user interaction
             // `currentLevel` is managed within game.ts, startLevel should handle it.
             // If main.ts needs to know the starting level, it can use the one from game.ts
@@ -16,12 +17,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     if (retryButton) {
-        retryButton.addEventListener('click', function () {
+        retryButton.addEventListener('click', () => {
             retryCurrentLevel();
         });
     }
     if (playAgainButton) {
-        playAgainButton.addEventListener('click', function () {
+        playAgainButton.addEventListener('click', () => {
             resetGame();
             // Optionally, auto-start the game or wait for user to click start
             // For now, resetGame should set it up for a new "Start Level" click.
