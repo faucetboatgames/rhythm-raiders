@@ -1,0 +1,142 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #0a0a23; /* Dark blue/purple */
+    color: #00ff00; /* Bright green */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    margin: 0;
+    text-align: center;
+}
+
+#game-container {
+    border: 2px solid #00ff00;
+    padding: 20px;
+    background-color: #1a1a3e; /* Slightly lighter dark blue */
+    box-shadow: 0 0 15px #00ff00;
+    max-width: 90%;
+    width: 400px; /* Fixed width for better control, adjust as needed */
+}
+
+header h1 {
+    font-size: 2em;
+    text-shadow: 0 0 5px #00ff00;
+    margin-bottom: 20px;
+}
+
+#level-display {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+}
+
+#sequence-display {
+    display: flex;
+    justify-content: space-around;
+    margin-bottom: 20px;
+    height: 80px; /* Ensure space for visual cues */
+}
+
+.cue-button {
+    width: 60px;
+    height: 60px;
+    border: 2px solid #00cc00; /* Slightly darker green */
+    background-color: #111; /* Dark background for buttons */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.5em;
+    transition: background-color 0.1s, box-shadow 0.1s;
+}
+
+.cue-button.active {
+    background-color: #00ff00;
+    color: #0a0a23;
+    box-shadow: 0 0 10px #00ff00;
+}
+
+#feedback-display {
+    min-height: 20px;
+    margin-bottom: 15px;
+    font-size: 1.1em;
+}
+
+.correct {
+    color: #00ff00; /* Bright green for correct */
+}
+
+.incorrect {
+    color: #ff0000; /* Bright red for incorrect */
+}
+
+#instructions p {
+    margin: 5px 0;
+}
+
+button {
+    background-color: #00ff00;
+    color: #0a0a23;
+    border: none;
+    padding: 10px 20px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1em;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.2s, color 0.2s;
+}
+
+button:hover {
+    background-color: #00cc00;
+    color: #000;
+}
+
+button:disabled {
+    background-color: #555;
+    color: #888;
+    cursor: not-allowed;
+}
+
+#win-screen {
+    border: 2px solid #00ff00;
+    padding: 30px;
+    background-color: #1a1a3e;
+    box-shadow: 0 0 20px #00ff00;
+}
+
+#win-screen h2 {
+    font-size: 2.5em;
+    text-shadow: 0 0 10px #00ff00;
+}
+
+footer p {
+    margin-top: 20px;
+    font-size: 0.9em;
+    color: #00cc00;
+}
+
+/* Mobile responsiveness */
+@media (max-width: 600px) {
+    #game-container {
+        width: 95%;
+        padding: 15px;
+    }
+
+    header h1 {
+        font-size: 1.8em;
+    }
+
+    .cue-button {
+        width: 50px;
+        height: 50px;
+        font-size: 1.2em;
+    }
+
+    #sequence-display {
+        height: 70px;
+    }
+
+    button {
+        padding: 8px 15px;
+        font-size: 0.9em;
+    }
+}

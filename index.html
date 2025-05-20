@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rhythm Memory Heist</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div id="game-container">
+        <header>
+            <h1>Rhythm Memory Heist</h1>
+        </header>
+        <main>
+            <div id="level-display">Level: <span id="current-level">1</span></div>
+            <div id="sequence-display">
+                <!-- Visual cues for the sequence will appear here -->
+                <div class="cue-button" id="cue-0" data-key="ArrowUp"></div>
+                <div class="cue-button" id="cue-1" data-key="ArrowDown"></div>
+                <div class="cue-button" id="cue-2" data-key="ArrowLeft"></div>
+                <div class="cue-button" id="cue-3" data-key="ArrowRight"></div>
+            </div>
+            <div id="feedback-display"></div>
+            <div id="instructions">
+                <p>Repeat the sequence using your arrow keys.</p>
+                <p>↑ ↓ ← →</p>
+            </div>
+            <button id="start-button">Start Level</button>
+            <button id="retry-button" style="display:none;">Retry Level</button>
+        </main>
+        <footer>
+            <p>Hack the system!</p>
+        </footer>
+    </div>
+    <div id="win-screen" style="display:none;">
+        <h2>System Hacked!</h2>
+        <p>Congratulations, master thief!</p>
+        <button id="play-again-button">Play Again</button>
+    </div>
+
+    <!-- JavaScript files will be linked here after TypeScript compilation -->
+    <!-- For development, we'll assume tsc compiles .ts to .js in the same directory -->
+    <script src="ui.js"></script>
+    <script src="game.js"></script>
+    <script src="main.js"></script>
+</body>
+</html>
