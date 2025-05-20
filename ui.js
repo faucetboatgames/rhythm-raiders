@@ -1,5 +1,6 @@
+"use strict";
 // Audio Context
-var audioCtx = null;
+let audioCtx = null;
 function initAudio() {
     if (!audioCtx) {
         try {
@@ -17,41 +18,40 @@ function initAudio() {
 // However, browsers often require user interaction to start AudioContext.
 // We'll add a call to it when the start button is pressed in main.ts.
 // Sound playing function
-function playTone(frequency, duration, type) {
-    if (type === void 0) { type = 'sine'; }
+function playTone(frequency, duration, type = 'sine') {
     if (!audioCtx)
         return;
-    var oscillator = audioCtx.createOscillator();
-    var gainNode = audioCtx.createGain();
+    const oscillator = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
     oscillator.connect(gainNode);
     gainNode.connect(audioCtx.destination);
     oscillator.type = type;
     oscillator.frequency.setValueAtTime(frequency, audioCtx.currentTime);
     gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime); // Volume
     oscillator.start();
-    setTimeout(function () {
+    setTimeout(() => {
         oscillator.stop();
         oscillator.disconnect();
         gainNode.disconnect();
     }, duration);
 }
 // Specific sounds
-var CUE_SOUND_FREQ = 440; // A4 note
-var CORRECT_INPUT_SOUND_FREQ = 660; // E5 note
-var INCORRECT_INPUT_SOUND_FREQ = 220; // A3 note
-var SOUND_DURATION = 150; // ms
+const CUE_SOUND_FREQ = 440; // A4 note
+const CORRECT_INPUT_SOUND_FREQ = 660; // E5 note
+const INCORRECT_INPUT_SOUND_FREQ = 220; // A3 note
+const SOUND_DURATION = 150; // ms
 // DOM Elements
-var levelDisplay = document.getElementById('current-level');
-var sequenceDisplayContainer = document.getElementById('sequence-display');
-var feedbackDisplay = document.getElementById('feedback-display');
-var startButton = document.getElementById('start-button');
-var retryButton = document.getElementById('retry-button');
-var gameContainer = document.getElementById('game-container');
-var winScreen = document.getElementById('win-screen');
-var playAgainButton = document.getElementById('play-again-button');
-var cueButtons = [];
-for (var i = 0; i < 4; i++) {
-    var btn = document.getElementById("cue-".concat(i));
+const levelDisplay = document.getElementById('current-level');
+const sequenceDisplayContainer = document.getElementById('sequence-display');
+const feedbackDisplay = document.getElementById('feedback-display');
+const startButton = document.getElementById('start-button');
+const retryButton = document.getElementById('retry-button');
+const gameContainer = document.getElementById('game-container');
+const winScreen = document.getElementById('win-screen');
+const playAgainButton = document.getElementById('play-again-button');
+const cueButtons = [];
+for (let i = 0; i < 4; i++) {
+    const btn = document.getElementById(`cue-${i}`);
     if (btn)
         cueButtons.push(btn);
 }
@@ -62,18 +62,18 @@ function updateLevelDisplay(level) {
     }
 }
 function showSequence(sequence, beatDuration) {
-    return new Promise(function (resolve) {
+    return new Promise(resolve => {
         disablePlayerInput();
-        var i = 0;
+        let i = 0;
         function nextCue() {
             if (i < sequence.length) {
-                var cueIndex = sequence[i];
-                var cueButton_1 = cueButtons[cueIndex];
-                if (cueButton_1) {
-                    cueButton_1.classList.add('active');
+                const cueIndex = sequence[i];
+                const cueButton = cueButtons[cueIndex];
+                if (cueButton) {
+                    cueButton.classList.add('active');
                     playTone(CUE_SOUND_FREQ, SOUND_DURATION, 'triangle');
-                    setTimeout(function () {
-                        cueButton_1.classList.remove('active');
+                    setTimeout(() => {
+                        cueButton.classList.remove('active');
                         i++;
                         setTimeout(nextCue, beatDuration / 2); // Pause between cues
                     }, beatDuration);
@@ -104,16 +104,16 @@ function displayFeedback(message, isCorrect) {
     }
 }
 function flashKey(keyIndex, success) {
-    var cueButton = cueButtons[keyIndex];
+    const cueButton = cueButtons[keyIndex];
     if (cueButton) {
-        var originalColor_1 = cueButton.style.backgroundColor;
-        var soundFreq = success ? CORRECT_INPUT_SOUND_FREQ : INCORRECT_INPUT_SOUND_FREQ;
-        var soundType = success ? 'sine' : 'square';
+        const originalColor = cueButton.style.backgroundColor;
+        const soundFreq = success ? CORRECT_INPUT_SOUND_FREQ : INCORRECT_INPUT_SOUND_FREQ;
+        const soundType = success ? 'sine' : 'square';
         playTone(soundFreq, SOUND_DURATION, soundType);
         cueButton.style.backgroundColor = success ? '#00ff00' : '#ff0000'; // Green for correct, Red for incorrect
         cueButton.classList.add('active'); // Use active class for consistent styling
-        setTimeout(function () {
-            cueButton.style.backgroundColor = originalColor_1;
+        setTimeout(() => {
+            cueButton.style.backgroundColor = originalColor;
             cueButton.classList.remove('active');
         }, 200);
     }
