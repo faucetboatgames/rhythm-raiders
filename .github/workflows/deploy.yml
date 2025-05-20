@@ -1,0 +1,40 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20' # Or your preferred Node.js version
+
+      - name: Install TypeScript
+        run: npm install -g typescript
+
+      - name: Compile TypeScript
+        run: tsc
+
+      - name: Create build directory
+        run: mkdir build
+
+      - name: Copy files to build directory
+        run: |
+          cp index.html build/
+          cp style.css build/
+          cp -r dist build/
+
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./build
+          publish_branch: gh-pages
