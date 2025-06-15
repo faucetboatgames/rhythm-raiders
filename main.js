@@ -30,6 +30,10 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     // Global key listener for player input
     document.addEventListener('keydown', handleKeyPress);
+    // Global touch listeners for mobile input
+    document.addEventListener('touchstart', handleTouchStart, { passive: false });
+    document.addEventListener('touchmove', handleTouchMove, { passive: false });
+    document.addEventListener('touchend', handleTouchEnd, { passive: false });
     // Initial UI setup
     resetGame(); // Sets up the initial state, including level display
     // displayFeedback('Press Start to begin!', null); // This is now handled by resetUIForNewGame -> resetGame

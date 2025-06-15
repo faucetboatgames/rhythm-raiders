@@ -17,6 +17,11 @@ let currentSequence = [];
 let playerSequence = [];
 let awaitingPlayerInput = false;
 let playerTurnTimeout;
+// Touch handling variables
+let touchStartX = null;
+let touchStartY = null;
+let touchHandled = false;
+const TOUCH_THRESHOLD = 40; // Minimum pixels for direction detection
 // Key mapping (0: Up, 1: Down, 2: Left, 3: Right)
 const keyMap = {
     'ArrowUp': 0,
@@ -49,6 +54,7 @@ function startLevel(levelNumber) {
         playerSequence = [];
         awaitingPlayerInput = false;
         clearTimeout(playerTurnTimeout);
+        resetTouchState(); // Clear any pending touch state
         updateLevelDisplay(currentLevel);
         displayFeedback(`Level ${currentLevel}: Watch the sequence!`, null);
         hideRetryButton(); // Hide retry button when level starts
@@ -71,19 +77,78 @@ function handleKeyPress(event) {
     const keyPressed = event.key;
     if (keyMap.hasOwnProperty(keyPressed)) {
         const keyIndex = keyMap[keyPressed];
-        playerSequence.push(keyIndex);
-        flashKey(keyIndex, true); // Flash key immediately on press
-        // Check if the pressed key is correct so far
-        const currentInputIndex = playerSequence.length - 1;
-        if (playerSequence[currentInputIndex] !== currentSequence[currentInputIndex]) {
-            handleIncorrectInput();
-            return;
-        }
-        // If sequence is complete and correct
-        if (playerSequence.length === currentSequence.length) {
-            handleCorrectSequence();
-        }
+        handleDirectionInput(keyIndex);
     }
+}
+function handleDirectionInput(direction) {
+    if (!awaitingPlayerInput)
+        return;
+    // Validate direction is within expected range
+    if (direction < 0 || direction > 3)
+        return;
+    playerSequence.push(direction);
+    flashKey(direction, true); // Flash key immediately on press
+    // Check if the pressed key is correct so far
+    const currentInputIndex = playerSequence.length - 1;
+    if (playerSequence[currentInputIndex] !== currentSequence[currentInputIndex]) {
+        handleIncorrectInput();
+        return;
+    }
+    // If sequence is complete and correct
+    if (playerSequence.length === currentSequence.length) {
+        handleCorrectSequence();
+    }
+}
+function handleTouchStart(event) {
+    if (!awaitingPlayerInput || event.touches.length !== 1)
+        return;
+    event.preventDefault();
+    const touch = event.touches[0];
+    touchStartX = touch.clientX;
+    touchStartY = touch.clientY;
+    touchHandled = false;
+}
+function handleTouchMove(event) {
+    if (!awaitingPlayerInput || touchHandled || event.touches.length !== 1)
+        return;
+    event.preventDefault();
+}
+function handleTouchEnd(event) {
+    if (!awaitingPlayerInput || touchHandled || touchStartX === null || touchStartY === null)
+        return;
+    event.preventDefault();
+    // Get the final touch position from changedTouches (since touches array is empty on touchend)
+    if (event.changedTouches.length !== 1)
+        return;
+    const touch = event.changedTouches[0];
+    const deltaX = touch.clientX - touchStartX;
+    const deltaY = touch.clientY - touchStartY;
+    // Calculate absolute deltas to determine primary direction
+    const absDeltaX = Math.abs(deltaX);
+    const absDeltaY = Math.abs(deltaY);
+    // Check if movement exceeds threshold
+    if (Math.max(absDeltaX, absDeltaY) < TOUCH_THRESHOLD) {
+        resetTouchState();
+        return;
+    }
+    let direction;
+    // Determine direction based on larger delta
+    if (absDeltaX > absDeltaY) {
+        // Horizontal movement
+        direction = deltaX > 0 ? 3 : 2; // Right (3) or Left (2)
+    }
+    else {
+        // Vertical movement
+        direction = deltaY > 0 ? 1 : 0; // Down (1) or Up (0)
+    }
+    touchHandled = true;
+    resetTouchState();
+    handleDirectionInput(direction);
+}
+function resetTouchState() {
+    touchStartX = null;
+    touchStartY = null;
+    touchHandled = false;
 }
 function handleCorrectSequence() {
     awaitingPlayerInput = false;
@@ -135,6 +200,7 @@ function resetGame() {
     currentSequence = [];
     awaitingPlayerInput = false;
     clearTimeout(playerTurnTimeout);
+    resetTouchState(); // Clear any pending touch state
     resetUIForNewGame();
     updateLevelDisplay(currentLevel);
 }
